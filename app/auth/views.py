@@ -8,32 +8,31 @@ from app import db
 
 
 
-@auth.route ('/login', methods=['GET','POST'])
+
+
+@auth.route('/about')
+def about():
+  return render_template('about.html')
+
+@auth.route("/register", methods=['GET','POST'])
+def register():
+      signup = RegistrationForm()
+      if signup.validate_on_submit():
+            flash(f'{signup.username.data} Account created successfully.', 'success')
+            user=User(first_name=signup.first_name.data, last_name=signup.last_name.data , username=signup.username.data,email=signup.email.data,password=signup.password.data)
+            db.session.add(user)
+            db.session.commit()
+            return redirect(url_for('auth_blueprint.login'))
+      title = "sigup"  
+      return render_template('auth/register.html', title = title , form=signup)
+  
+  
+@auth.route("/login")
 def login():
-    login=LoginForm()
-    if login.validate_on_submit():
-        user=User.query.filter_by(email=login.email.data).first()
-        if user is not None and user.verify_password(login.password.data):
-            login_user(user, login.remember.data)
-            return redirect(request.args.get('next') or url_for('main_blueprint.bloggerr'))
-        
-        flash('invalid Email or password')    
-    
-    return render_template('auth/login.html', login=login)     
-
-@auth.route('/signup', methods=['GET','POST'])  
-def signup():
-    signup=RegistrationForm()
-    if signup.validate_on_submit():
-        user=User(username=signup.username.data,email=signup.email.data,password=signup.password.data)
-        db.session.add(user)
-        db.session.commit()
-        return redirect(url_for('auth_blueprint.login'))
-    
-    return render_template('auth/signup.html', signup=signup)
-
-@auth.route('/logout')
-@login_required
-def logout():
-    logout_user()
-    return redirect(url_for('main_blueprint.index'))
+      form = LoginForm()
+      if form.validate_on_submit():
+            if form.email.data == 'admin@blog.com' and form.password.data == 'password':
+                  return redirect(url_for('about'))
+            else:
+                flash('login unsuccessful.Check credentials', 'danger')
+      return render_template('auth/login.html', title = 'Login', form=form)
