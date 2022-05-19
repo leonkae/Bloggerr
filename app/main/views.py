@@ -1,18 +1,21 @@
 from flask import render_template,redirect,url_for,request,abort
 from . import main_blueprint as main
-from flask_login import login_required
+from flask_login import current_user, login_required
 from .forms import PostsForm,CommentForm,UpdateAccount
 from .models import Post,User,Comments
 from app import db,photos
-
+from datetime import datetime as dt
 
 
 @main.route('/')
 def index():
-    return render_template('index.html')
+    posts = Post.query.all()
+    form = CommentForm()
+    
+    return render_template('index.html',posts=posts, comment_form=form)
 
 @main.route('/posts')
-# @login_required
+@login_required
 def posts():
     posts = Post.query.all()
     form = CommentForm()
@@ -20,11 +23,14 @@ def posts():
 
 
 @main.route('/posts/add', methods=['GET', 'POST'])
-# @login_required
+@login_required
 def create_post():
     create_post=PostsForm()
+    now = dt.now()
     if create_post.validate_on_submit():
-        post = Post(title=create_post.title.data, content=create_post.body.data)
+        date_posted=now.strftime('%a %d %b %Y %H:%M:%S')
+        user_id=current_user._get_current_object().id
+        post = Post(title=create_post.title.data, content=create_post.content.data,date_posted=date_posted,user_id=user_id)
         db.session.add(post)
         db.session.commit()
         return redirect(url_for('main_blueprint.posts'))
