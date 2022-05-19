@@ -33,14 +33,13 @@ def register():
 def login():
     login=LoginForm()
     if login.validate_on_submit():
-        user=User.query.filter_by(email=login.email.data).first()
-        if user is not None and user.verify_password(login.password.data):
-            login_user(user, login.remember.data)
-            print(user)
-            return redirect(request.args.get('next') or url_for('main_blueprint.posts'))
-        
-        flash('invalid Email or password')    
-    
+        user = User.query.filter_by(email=login.email.data).first()
+        if user is None and user.verify_password(login.password.data):
+            flash("Invalid email or password")
+            return redirect(url_for('auth_blueprint.login'))
+        login_user(user, remember=login.remember.data)
+        next_page = request.args.get('next')
+        return redirect(next_page) if next_page else redirect(url_for('main_blueprint.posts'))
     return render_template('auth/login.html', login=login)
 
 
