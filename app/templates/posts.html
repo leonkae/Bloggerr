@@ -1,12 +1,28 @@
 {% extends 'base.html' %} {% block content %}
 
-<div class="container">
-  <div class="title">Bloggerr</div>
+
+{% for post in posts %}
+<div class="posts-container">
   <div class="posts-wrapper">
-    <h4 class="content">{{posts.title}}</h4>
-    <p class="content">{{posts.content}}</p>
-    <p class="content">{{posts.date_posted}}</p>
+    <h4 class="content">{{post.title}}</h4>
+    <p class="content">{{post.content}}</p>
+    <p class="content">{{post.dateposted}}</p>
+    <form action="/comment/{{post.id}}/add" method="post" class="content-form">
+      {{comment_form.csrf_token}}
+      <p>
+        {{comment_form.comment(placeholder="comment",class="input-comment")}}
+      </p>
+      <p>{{comment_form.submit(class="button")}}</p>
+    </form>
+    <div class="comment-content-content">
+      {%for comment in post.comments%}
+      <p class="comment-content">{{comment.comment}}</p>
+      {%endfor%}
+    </div>
   </div>
 </div>
+{% endfor %}
+
+
 
 {% endblock %}
