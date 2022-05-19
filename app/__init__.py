@@ -1,14 +1,14 @@
-from multiprocessing import Manager
 from flask import Flask
 from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from .config import config_options
+from flask_uploads import UploadSet,configure_uploads,IMAGES
 
 db = SQLAlchemy()
 login_manager =LoginManager()
 login_manager.session_protection = 'strong'
 login_manager.login_view = 'auth_blueprint.login'
-# photos = UploadSet('photos',IMAGES)
+photos = UploadSet('photos',IMAGES)
 
 
 def create_app(config_name):
@@ -16,7 +16,7 @@ def create_app(config_name):
     app.config.from_object(config_options[config_name])
     db.init_app(app)
     login_manager.init_app(app)
-    # configure_uploads(app,photos)
+    configure_uploads(app,photos)
     
     from .auth import auth_blueprint
     from .main import main_blueprint
