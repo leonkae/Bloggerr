@@ -1,29 +1,47 @@
 {% extends 'base.html' %} {% block content %}
-<h1>posts</h1>
-<a href="{{url_for('main_blueprint.create_post')}}">createposts</a>
+<div class="container">
+  <div class="title">
+    <h1>My Posts</h1>
+  </div>
 
-{% for post in posts %}
-<div class="posts-container">
-  <div class="posts-wrapper">
-    <h4 class="content">{{post.title}}</h4>
-    <p class="content">{{post.content}}</p>
-    <p class="content">{{post.dateposted}}</p>
-    <form action="/comment/{{post.id}}/add" method="post" class="content-form">
-      {{comment_form.csrf_token}}
-      <p>
-        {{comment_form.comment(placeholder="comment",class="input-comment")}}
-      </p>
-      <p>{{comment_form.submit(class="button")}}</p>
-    </form>
-    <div class="comment-content-content">
-      {%for comment in post.comments%}
-      <p class="comment-content">{{comment.comment}}</p>
-      {%endfor%}
+  <div class="navbar">
+    <p>
+      click to
+      <a href="{{url_for('main_blueprint.create_post')}}">createposts</a>
+    </p>
+  </div>
+  <span class="line"></span>
+
+  {% for post in posts %}
+  <div class="posts-container">
+    <div class="user-container">
+      <h2 class="account-heading">Username: {{username}}</h2>
+    </div>
+    <div class="posts-wrapper">
+      <h4 class="content">{{post.title}}</h4>
+      <p class="content">{{post.content}}</p>
+      <p class="content-date">{{post.dateposted}}</p>
+      <form
+        action="/comment/{{post.id}}/add"
+        method="post"
+        class="content-form"
+      >
+        {{comment_form.csrf_token}}
+        <p>
+          {{comment_form.comment(placeholder="comment",class="input-comment")}}
+        </p>
+        <p>{{comment_form.submit(class="button")}}</p>
+      </form>
+      <div class="comment-content-content">
+        {%for comment in post.comments%}
+        <p class="comment-content">{{comment.comment}}</p>
+        {%endfor%}
+      </div>
     </div>
   </div>
+  <span class="line"></span>
+
+  {% endfor %}
 </div>
-{% endfor %}
-
-
 
 {% endblock %}
