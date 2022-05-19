@@ -7,26 +7,35 @@ from flask_login import UserMixin
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.querry.get(int(user_id))
+    return User.query.get(int(user_id))
 
 class User(db.Model,UserMixin):
     
-      __tablename__ = 'users'
-      id = db.Column(db.Integer, primary_key=True)
-      first_name = db.Column(db.String(20), nullable=False)
-      last_name = db.Column(db.String(20), nullable=False)
-      username = db.Column(db.String(20), unique=True, nullable=False)
-      email = db.Column(db.String(20), unique=True, nullable=False)
-      profile_pic_path = db.Column(db.String(20), nullable=False, default='default.jpg')
-      password = db.Column(db.String(60), nullable=False)
-      bio = db.Column(db.String(255))   
-      posts = db.relationship('Post', backref='author', lazy=True)
+    __tablename__ = 'users'
+    id = db.Column(db.Integer, primary_key=True)
+    first_name = db.Column(db.String(120), nullable=False)
+    last_name = db.Column(db.String(120), nullable=False)
+    username = db.Column(db.String(120), unique=True, nullable=False)
+    email = db.Column(db.String(120), unique=True, nullable=False)
+    profile_pic_path = db.Column(db.String(120), nullable=False, default='default.jpg')
+    password_hash = db.Column(db.String(255), nullable=False)
+    bio = db.Column(db.String(255))   
+    posts = db.relationship('Post', backref='author', lazy=True)
       
+    @property
+    def password(self):
+        raise AttributeError('You cannot Read Attribute Error')
+
+    @password.setter
+    def password(self, password):
+        self.password_hash = generate_password_hash(password)
+
+    def verify_password(self, password):
+        return check_password_hash(self.password_hash, password)
+
+    def __repr__(self):
+        return f'<User: {self.username}>'
       
-      
-      
-      def __repr__(self):
-          return f"User('{self.last_name}','{self.first_name}','{self.username}','{self.email}','{self.profile_pic_path}')"
     
     
 class Post(db.Model):
