@@ -1,0 +1,27 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="nav-wrapper">
+  <a href="{{url_for('auth_blueprint.logout')}}">logout</a>
+</div>
+
+<div class="title-wrapper-account">
+  <h1>Edit bio</h1>
+</div>
+
+<div class="bio-form">
+  <form method="post">
+    {{ update.csrf_token }}
+    <p class="input">{{update.bio(placeholder="bio", class="form-input-bio")}}</p>
+    {% for error in update.bio.errors %}
+    <li class="error">{{error}}</li>
+    {% endfor %}
+
+    <p class="btn">{{update.submit()}}</p>
+    {% for error in update.submit.errors %}
+    <li class="error">{{error}}</li>
+    {% endfor %}
+  </form>
+</div>
+
+
+{% endblock %}
