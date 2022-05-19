@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block content %}
+
+<div class="container">
+  <div class="title">Bloggerr</div>
+  <div class="posts-wrapper">
+    <h4 class="content">{{posts.title}}</h4>
+    <p class="content">{{posts.content}}</p>
+    <p class="content">{{posts.date_posted}}</p>
+  </div>
+</div>
+
+{% endblock %}
