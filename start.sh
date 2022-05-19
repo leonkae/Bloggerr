@@ -1,5 +1,5 @@
 export SQLALCHEMY_DATABASE_URI='postgresql://jurassic:pass123@localhost/bloggerr'
-export SECRET_KEY = 'bxcdxf3xccxbcCPrxbx0cx8aDx97x9fxcfp'
+export SECRET_KEY='bxcdxf3xccxbcCPrxbx0cx8aDx97x9fxcfp'
 # python3 manage.py shell
 python manage.py server
 # python manage.py db init
