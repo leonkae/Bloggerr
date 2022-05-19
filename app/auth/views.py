@@ -27,12 +27,19 @@ def register():
       return render_template('auth/register.html', title = title , form=signup)
   
   
-@auth.route("/login")
+
+
+@auth.route ('/login', methods=['GET','POST'])
 def login():
-      form = LoginForm()
-      if form.validate_on_submit():
-            if form.email.data == 'admin@blog.com' and form.password.data == 'password':
-                  return redirect(url_for('about'))
-            else:
-                flash('login unsuccessful.Check credentials', 'danger')
-      return render_template('auth/login.html', title = 'Login', form=form)
+    login=LoginForm()
+    if login.validate_on_submit():
+        user=User.query.filter_by(email=login.email.data).first()
+        if user is not None and user.verify_password(login.password.data):
+            login_user(user, login.remember.data)
+            print(user)
+            return redirect(request.args.get('next') or url_for('main_blueprint.posts'))
+        
+        flash('invalid Email or password')    
+    
+    return render_template('auth/login.html', login=login)
+
