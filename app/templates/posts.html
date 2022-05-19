@@ -1,5 +1,6 @@
 {% extends 'base.html' %} {% block content %}
-
+<h1>posts</h1>
+<a href="{{url_for('main_blueprint.create_post')}}">createposts</a>
 
 {% for post in posts %}
 <div class="posts-container">
