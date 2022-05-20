@@ -4,10 +4,17 @@
   <div class="title">
     <h1>Create Blog</h1>
   </div>
-   <div class="content-container">
-    <p>
-      a blog post maybe ?
-    </p>
+
+  <div class="nav-wrapper">
+    <a href="{{url_for('main_blueprint.posts')}}">blogs</a>
+    <a href="{{url_for('main_blueprint.account',uname=current_user.username)}}"
+      >my profile</a
+    >
+    <a href="{{url_for('auth_blueprint.logout')}}">logout</a>
+  </div>
+
+  <div class="content-container">
+    <p>a blog post maybe ?</p>
   </div>
 
   <div class="create-container">
@@ -19,12 +26,13 @@
         {% for error in create.title.errors %}
         <li class="error">{{error}}</li>
         {% endfor %}
-        <p>{{create.date_posted(placeholder="Enter post",class="input-form")}}</p>
+        <p>
+          {{create.date_posted(placeholder="Enter post",class="input-form")}}
+        </p>
         {% for error in create.content.errors %}
         <li class="error">{{error}}</li>
         {% endfor %}
         <p>{{create.content(placeholder="blog here",class="input-blog")}}</p>
-    
 
         <p class="btn">{{create.submit(class="button")}}</p>
         {% for error in create.submit.errors %}
@@ -33,7 +41,5 @@
       </form>
     </div>
   </div>
-
- 
 </div>
 {% endblock %}
