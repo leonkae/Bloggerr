@@ -36,6 +36,9 @@ def create_post():
         return redirect(url_for('main_blueprint.posts'))
     return render_template('createpost.html',create=create_post)
 
+    
+
+
 @main.route('/comment/<int:post_id>/add', methods=['POST'])
 @login_required
 def add_comment(post_id):
