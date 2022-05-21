@@ -1,6 +1,7 @@
+from msilib.schema import Class
 import unittest
 
-from main import models,User
+from main import models,User, Post
 
 '''writing tests'''
 
@@ -50,5 +51,38 @@ class User(unittest.TestCase):
         '''tests for show'''
         self.assertEqual(User.show_account(),User.user_list)        
         
-            
-            
+class Post (unittest.TestCase):
+    '''tests for post'''
+    def setUp(self):
+        self.new_post = Post("title","date","this is content")
+        
+        
+    def test_init(self):
+        self.assertTrue(self.post.title,'title')
+        self.assertTrue(self.post.date_posted,'date')
+        self.assertTrue(self.post.content,'this is content')
+        
+    def test_store_post(self):
+        self.new_post.store_post()
+        self.assertEqual(len(Post.posts_list),3)
+        
+    def test_find_post(self):
+        '''test for post'''
+        self.new_post.store_post()
+        post_check = Post ("title","date","content")   
+        post_check.store_post()
+        
+        post = Post.find_post("title")
+        
+        self.assertTrue(post_check.account1_present)    
+    
+class Comments(unittest.TestCase):
+    '''tests for comments'''
+    def setUp(self):
+        self.new_comment= Comments("comment")       
+        
+    def test_init(self):
+        self.asssertTrue(self.Comments.comment,"comment")   
+           
+if __name__== '__main__':
+    unittest.main()
